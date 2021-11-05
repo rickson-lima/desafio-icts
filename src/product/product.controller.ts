@@ -5,7 +5,7 @@ import {
   Post,
   Param,
   Delete,
-  Patch,
+  Put,
 } from '@nestjs/common';
 import { ResponseDto } from 'src/dto/response.dto';
 import { ProductCreateDto } from './dto/create-product.dto';
@@ -32,13 +32,13 @@ export class ProductController {
     return this.productService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() data: ProductUpdateDto) {
-    return this.productService.update(+id, data);
+  @Put(':id')
+  updateOne(@Param('id') id: string, @Body() data: ProductUpdateDto) {
+    return this.productService.updateOne(+id, data);
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string) {
-    return this.productService.remove(+id);
+  async deleteOne(@Param('id') id: string) {
+    return this.productService.deleteOne(+id);
   }
 }

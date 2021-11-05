@@ -59,7 +59,7 @@ export class ProductService {
     }
   }
 
-  async update(id: number, data: ProductUpdateDto) {
+  async updateOne(id: number, data: ProductUpdateDto) {
     let { name, price, description } = data;
     if (!name || !price || !description)
       return <ResponseDto>{
@@ -93,7 +93,7 @@ export class ProductService {
     }
   }
 
-  async remove(id: number) {
+  async deleteOne(id: number) {
     try {
       const productResult = await this.productRepository.delete(id);
 
