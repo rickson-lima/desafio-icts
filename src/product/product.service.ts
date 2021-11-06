@@ -12,18 +12,14 @@ export class ProductService {
     private productRepository: Repository<Product>,
   ) {}
 
+  // TODO: REFATORAR RETORNOS
   async create(data: ProductCreateDto): Promise<ResponseDto> {
-    let { name, price, description } = data;
-    if (!name || !price || !description)
-      return <ResponseDto>{
-        statusCode: 400,
-        message: 'Product name, description and price are required.',
-      };
+    const product = new Product();
 
-    let product = new Product();
-    product.name = name;
-    product.description = description;
-    product.price = price;
+    product.name = data.name;
+    product.description = data.description;
+    product.price = data.price;
+    product.image_url = data.image_url;
 
     try {
       await this.productRepository.save(product);
@@ -34,7 +30,7 @@ export class ProductService {
     } catch (error) {
       return <ResponseDto>{
         statusCode: 500,
-        message: 'Product not created',
+        message: error,
       };
     }
   }
@@ -45,55 +41,50 @@ export class ProductService {
 
   async findOne(id: number): Promise<Product | ResponseDto> {
     try {
-      const productResult = await this.productRepository.findOne(id);
+      const product = await this.productRepository.findOne(id);
 
-      if (!productResult)
+      if (!product)
         return <ResponseDto>{
           statusCode: 404,
           message: 'Product not found',
         };
 
-      return productResult;
+      return product;
     } catch (error) {
-      return error;
+      return <ResponseDto>{
+        statusCode: 500,
+        message: error,
+      };
     }
   }
 
-  async updateOne(id: number, data: ProductUpdateDto) {
-    let { name, price, description } = data;
-    if (!name || !price || !description)
-      return <ResponseDto>{
-        statusCode: 400,
-        message: 'Product name, description and price are required.',
-      };
-
-    let product = new Product();
-    product.name = name;
-    product.description = description;
-    product.price = price;
+  async updateOne(id: number, data: ProductUpdateDto): Promise<ResponseDto> {
+    let { name, description, price, image_url } = data;
+    const product = new Product();
 
     try {
-      const productResult = await this.productRepository.update(id, product);
-      if (productResult.affected === 0) {
-        return <ResponseDto>{
-          statusCode: 404,
-          message: 'Product not found',
-        };
-      }
+      const productFromDB = await this.productRepository.findOne(id);
+
+      product.name = name || productFromDB.name;
+      product.description = description || productFromDB.description;
+      product.price = price || productFromDB.price;
+      product.image_url = image_url || productFromDB.image_url;
+
+      await this.productRepository.update(id, product);
 
       return <ResponseDto>{
-        statusCode: 201,
+        statusCode: 200,
         message: 'Product successfully updated',
       };
     } catch (error) {
       return <ResponseDto>{
         statusCode: 500,
-        message: 'Product not updated',
+        message: error,
       };
     }
   }
 
-  async deleteOne(id: number) {
+  async deleteOne(id: number): Promise<ResponseDto> {
     try {
       const productResult = await this.productRepository.delete(id);
 
@@ -108,7 +99,10 @@ export class ProductService {
         message: 'Product successfully deleted',
       };
     } catch (error) {
-      return error;
+      return <ResponseDto>{
+        statusCode: 500,
+        message: error,
+      };
     }
   }
 }
