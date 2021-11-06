@@ -49,7 +49,9 @@ export class PurchaseService {
 
   async findOne(id: number): Promise<Purchase | ResponseDto> {
     try {
-      const purchase = await this.purchaseRepository.findOne(id);
+      const purchase = await this.purchaseRepository.findOne(id, {
+        relations: ['products'],
+      });
 
       if (!purchase)
         return <ResponseDto>{
@@ -68,13 +70,15 @@ export class PurchaseService {
 
   async updateOne(id: number, data: PurchaseUpdateDto): Promise<ResponseDto> {
     const { payment_method, status, products } = data;
-    try {
-      const purchase = await this.purchaseRepository.findOne(id);
+    const purchase = new Purchase();
 
-      purchase.payment_method = payment_method || purchase.payment_method;
-      purchase.total = CalculateTotalPurchase(products) || purchase.total;
-      purchase.products = products || purchase.products;
-      purchase.status = status || purchase.status;
+    try {
+      const purchaseFromDB = await this.purchaseRepository.findOne(id);
+
+      purchase.payment_method = payment_method || purchaseFromDB.payment_method;
+      purchase.total = CalculateTotalPurchase(products) || purchaseFromDB.total;
+      purchase.products = products || purchaseFromDB.products;
+      purchase.status = status || purchaseFromDB.status;
 
       await this.purchaseRepository.save(purchase);
 
