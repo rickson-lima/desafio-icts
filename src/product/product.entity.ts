@@ -6,6 +6,8 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+const IMG_PLACEHOLDER =
+  'https://patriciaelias.com.br/wp-content/uploads/2021/01/placeholder.png';
 @Entity()
 export class Product {
   @PrimaryGeneratedColumn()
@@ -19,6 +21,9 @@ export class Product {
 
   @Column('double')
   price: number;
+
+  @Column({ length: 500, default: IMG_PLACEHOLDER })
+  image_url: String;
 
   @CreateDateColumn({
     type: 'timestamp',
