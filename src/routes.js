@@ -1,17 +1,28 @@
 import React from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
+
+import Home from "./pages/Home";
+import ProductDetails from "./pages/ProductDetails";
+import NewProduct from "./pages/NewProduct";
+import Purchases from "./pages/Purchases";
+import PurchaseDetails from "./pages/PurchaseDetails";
 
 import { GlobalStyle } from "./styles/globals";
 
 const AppRoutes = () => (
   <BrowserRouter>
     <GlobalStyle />
-    <Routes>
-      <Route exact path="/" element={<h1>Home | Products</h1>} />
-      <Route path="/purchase" element={<h1>Purchase</h1>} />
+    <Switch>
+      <Route exact path="/" component={Home} />
 
-      <Route path="*" element={<h1>Page not found</h1>} />
-    </Routes>
+      <Route path="/products/new" component={NewProduct} />
+      <Route path="/products/:id" component={ProductDetails} />
+
+      <Route exact path="/purchases" component={Purchases} />
+      <Route exact path="/purchases/:id" component={PurchaseDetails} />
+
+      <Route path="*" component={() => <h1>Page not found</h1>} />
+    </Switch>
   </BrowserRouter>
 );
 

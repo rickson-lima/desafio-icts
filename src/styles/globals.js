@@ -12,6 +12,7 @@ export const GlobalStyle = createGlobalStyle`
   --secondary-color: #346182;
   --gray-color: #4B4746;
   --white-color: #f0f0f0;
+  --dark-color: #474747;
 
   --delete: #eb3b35;
 }
@@ -23,30 +24,37 @@ body, html {
 }
 body,
 input,
-button {
+button, select {
   font: 600 1rem 'Montserrat', sans-serif;
   color: var(--gray-color);
   border: none;
 }
 p,
 textarea {
-  font: 500 1rem Inter;
-  color: var(---gray-color);
+  font: 500 1rem 'Montserrat', sans-serif;
+  color: var(---dark-color);
 }
 .drop-shadow {
   -webkit-box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.15);
   box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.15);
 }
 
-.button {
+a {
+  text-decoration: none;
+  color: var(--gray-color);
+}
+
+button {
   cursor: pointer;
   font-size: 1.15rem;
   line-height: 1.625rem;
   transition: all 0.2s;
   cursor: pointer;
-  display: inline-flex;
-  justify-content: center;
   align-items: center;
+  background-color: var(--secondary-color);
+  border-radius: .25rem;
+  color: var(--white-color);
+  padding: .5rem;
 }
 
 @media (max-width: 1080px) {
@@ -59,10 +67,4 @@ textarea {
     font-size: 87.5%;
   }
 }
-`;
-
-export const AppBackground = createGlobalStyle`
-  body {
-    background-color: var(--background-dark);
-  }
 `;
